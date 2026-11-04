@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 160" role="img" aria-label="PWA Baker: a Mac Dock with rounded app tiles, one being baked">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2b3a55"/>
+      <stop offset="1" stop-color="#4a3f6b"/>
+    </linearGradient>
+  </defs>
+  <rect width="240" height="160" rx="12" fill="url(#bg)"/>
+  <!-- menu bar -->
+  <rect width="240" height="12" fill="#ffffff" fill-opacity="0.14"/>
+  <circle cx="10" cy="6" r="2.5" fill="#ffffff" fill-opacity="0.7"/>
+  <rect x="190" y="4" width="14" height="4" rx="2" fill="#ffffff" fill-opacity="0.6"/>
+  <rect x="210" y="4" width="20" height="4" rx="2" fill="#ffffff" fill-opacity="0.6"/>
+  <!-- a browser window floating above the dock, being baked -->
+  <rect x="62" y="26" width="116" height="62" rx="7" fill="#f4f1ea"/>
+  <rect x="62" y="26" width="116" height="12" rx="7" fill="#d9d4c7"/>
+  <rect x="62" y="32" width="116" height="6" fill="#d9d4c7"/>
+  <circle cx="72" cy="32" r="2.2" fill="#e5705f"/>
+  <circle cx="80" cy="32" r="2.2" fill="#e8b84d"/>
+  <circle cx="88" cy="32" r="2.2" fill="#6bbf6a"/>
+  <rect x="100" y="29" width="64" height="6" rx="3" fill="#ffffff"/>
+  <rect x="72" y="46" width="44" height="6" rx="3" fill="#c7c1b2"/>
+  <rect x="72" y="58" width="96" height="5" rx="2.5" fill="#dcd7ca"/>
+  <rect x="72" y="68" width="80" height="5" rx="2.5" fill="#dcd7ca"/>
+  <!-- arrow from window down to the dock tile -->
+  <path d="M120 92 L120 106" stroke="#f08a3c" stroke-width="3" stroke-linecap="round" fill="none"/>
+  <path d="M114 101 L120 108 L126 101" stroke="#f08a3c" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <!-- dock -->
+  <rect x="26" y="112" width="188" height="36" rx="12" fill="#ffffff" fill-opacity="0.22"/>
+  <rect x="36" y="117" width="26" height="26" rx="7" fill="#5ba3d9"/>
+  <rect x="68" y="117" width="26" height="26" rx="7" fill="#6bbf8f"/>
+  <!-- the tile being baked -->
+  <rect x="100" y="117" width="26" height="26" rx="7" fill="#f08a3c"/>
+  <rect x="105" y="123" width="16" height="13" rx="2.5" fill="#ffffff"/>
+  <rect x="105" y="123" width="16" height="4" rx="2" fill="#fbd9bd"/>
+  <path d="M113 128.5 L113 134.5 M110 131.5 L116 131.5" stroke="#f08a3c" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+  <rect x="132" y="117" width="26" height="26" rx="7" fill="#9b7fd1"/>
+  <rect x="164" y="117" width="26" height="26" rx="7" fill="#e2c15a"/>
+</svg>

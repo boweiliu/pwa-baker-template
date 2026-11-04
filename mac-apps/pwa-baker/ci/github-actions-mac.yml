@@ -1,0 +1,48 @@
+name: mac
+on:
+  push:
+  workflow_dispatch:
+# Copy to .github/workflows/ in a repo holding this folder to run it on a GitHub Mac runner.
+defaults:
+  run:
+    working-directory: mac-apps/pwa-baker
+jobs:
+  build-and-bake:
+    runs-on: macos-14
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: Engine tests on the Mac's own python 3.9
+        run: |
+          /usr/bin/python3 --version
+          /usr/bin/python3 -m venv /tmp/py39
+          /tmp/py39/bin/pip install -q pytest
+          /tmp/py39/bin/python -m pytest engine/tests -q
+      - name: Installer parses under the Mac's own bash 3.2
+        run: /bin/bash -n engine/pwa_baker/resources/install-pwa-full.sh
+      - name: Build the app
+        run: |
+          swiftc --version
+          ./build.sh build
+          codesign --verify --deep --strict "build/PWA Baker.app"
+          plutil -lint "build/PWA Baker.app/Contents/Info.plist"
+          ditto -c -k --keepParent "build/PWA Baker.app" "build/PWA-Baker.zip"
+      - name: Get Chromium
+        run: ci/get_chromium.sh
+      - name: Bake through the shared folder with real Chromium
+        run: python3 ci/mac_e2e.py "build/PWA Baker.app" build/screenshots
+      - name: Keep the app, screenshots and logs
+        if: always()
+        run: |
+          mkdir -p build/logs
+          cp ~/Library/Logs/pwa-baker/*.log build/logs/ 2>/dev/null || true
+          cp -R build/AppIcon.iconset build/logs/ 2>/dev/null || true
+          cp /tmp/e2e-letter.png build/screenshots/ 2>/dev/null || true
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: pwa-baker-mac
+          path: |
+            mac-apps/pwa-baker/build/PWA-Baker.zip
+            mac-apps/pwa-baker/build/screenshots
+            mac-apps/pwa-baker/build/logs

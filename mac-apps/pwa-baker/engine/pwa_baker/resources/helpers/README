@@ -1,0 +1,2 @@
+Python snippets install-pwa-full.sh runs. They used to be heredocs inside $(...), which
+macOS /bin/bash 3.2 cannot parse, so the installer only worked under Homebrew bash.

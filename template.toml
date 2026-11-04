@@ -1,0 +1,107 @@
+# Machine-readable manifest for this template. The sibling
+# template.md holds the prose, the Requirements list, and the two
+# append-only history logs; this file is authoritative for everything
+# below. Both are generated together -- validate_template.py fails if
+# they disagree.
+format = "v2"
+
+[template]
+slug = "pwa-baker"
+title = "PWA Baker"
+description = "Turn any web address into a real Chromium web app on your Mac (own window, name and Dock icon), and let your Studio agent bake them for you through a shared folder."
+thumbnail = "template.svg"
+version = "v1"
+
+# How this template is DERIVED from the workspace it came from. An
+# update re-runs this recipe rather than diffing two repos, which is what
+# keeps an exclusion excluded even though the thing still exists upstream.
+[recipe]
+include = [".agents/skills/bake-pwa-on-mac"]
+data_include = []
+# FILL IN: one entry per deliberate exclusion (paths left out, and
+# features stripped from an included path). Leave [] if nothing was.
+exclude = ["Python bytecode caches (__pycache__) under the Mac app and the skill", "Anything outside the Mac app's own folder and the skill: the publisher's other workspace content, notes and data"]
+# FILL IN: one entry per published-version modification, stated as a RULE
+# and NEVER the removed value -- the point of a modification is that the
+# value does not ship. e.g. "replace the hardcoded team channel with a
+# neutral default". Leave [] if there were none.
+modification_rules = [
+  "ship the bake-pwa-on-mac skill in its generalized form: it points at the Mac app inside this template (mac-apps/pwa-baker) and installs it from the public template repository, never from the publisher's private repository",
+  "ship the Mac app source generalized: neutral bundle id and daemon label, no step that retires an earlier background script of the publisher, no pointers into the publisher's private notes, generic docs",
+  "name the Mac app's python tests test_pwa_baker_*.py so they do not collide with the workspace's own test names",
+]
+
+# Everything an adopter must deal with before this is really theirs.
+# One list -- but each entry's KIND says how it is handled, because the
+# two are handled at different times by different mechanisms:
+#
+#   permission / secret / llm = ACTIVATION. The adopting agent acts on
+#   these FIRST and BY ITSELF, initiating each latchkey permission
+#   request and each secret request before asking the user anything.
+#   Every one of them must have a matching requires_ line in template.md
+#   and vice versa -- the validator checks that, because an adopter once
+#   never got prompted for a permission the app needed.
+#
+#   The [[requirements.secret]] entries below were AGGREGATED from the
+#   included apps' app.toml [[secrets]] and skills' SKILL.md secrets:
+#   declarations, plus every data/.secrets/<file>.env the included
+#   mcp-servers.json and supervisord programs run under. Fix a wrong one
+#   at its declaration, not here.
+#
+#   adaptation = worked through INTERACTIVELY with the user afterwards.
+#   Prose on both sides, so it is not cross-checked.
+#
+# FILL IN, e.g.:
+#   [[requirements.permission]]
+#   scope = "slack-api"
+#   permission = "slack-read-all"
+#
+#   [requirements.llm]
+#   method = "keyed"   # keyed (an API key, e.g. ANTHROPIC_API_KEY) | keyless (a subscription CLI, e.g. claude -p)
+#
+#   [[requirements.adaptation]]
+#   summary = "the digest channel is hardcoded"
+#   resolution = "ask the user which channel to watch"
+[requirements]
+
+[[requirements.permission]]
+scope = "file-sharing"
+permission = "WRITE access to ~/PWA Baker on the user's Mac (synced)"
+
+[[requirements.adaptation]]
+summary = "The Mac app must be installed on the user's Mac (Chromium, Node and the Xcode command line tools first)"
+resolution = "have the user run the one-line install from mac-apps/pwa-baker/README.md in Terminal on the Mac; the app's Setup tab lists anything missing"
+
+[[requirements.adaptation]]
+summary = "Studio's synced copy of the shared folder is not available on every workspace host"
+resolution = "accept the file-server path (needs the Mac awake with Studio open) or use the public-link fallback described in the skill"
+
+[[requirements.adaptation]]
+summary = "The Chromium app template was captured on Chromium 158 and checked on 159"
+resolution = "if a much newer Chromium is installed, regenerate the calibration template with engine/pwa_baker/resources/calib/regen.sh (see docs/OPERATIONS.md)"
+
+[[requirements.adaptation]]
+summary = "The install line in the skill points at the template's public repository"
+resolution = "if the adopter hosts the Mac app elsewhere, change the install line in the skill's not_installed branch"
+
+# What the included code needs INSTALLED. apt takes bare names: versions
+# are a function of the apt snapshot timestamp, so replaying names at the
+# adopter's timestamp yields versions consistent with the rest of their
+# environment. The other sources are not snapshot-pinned, so for them the
+# recorded version IS the pin (name = version).
+#
+# FILL IN from what the included code actually needs, e.g.:
+#   apt = ["poppler-utils"]
+#   [environment.npm_global]
+#   "@slack/cli" = "2.1.0"
+#   [environment.uv_tools]
+#   yt-dlp = "2026.7.1"
+#   [environment.cargo_crates]
+#   fd-find = "9.0.0"
+#
+# For an install with no package database (a URL-fetched binary, a browser),
+# ship a system/scripts/env.d/<NNNN>-<slug>-<name>.sh unit with NNNN >= 2000,
+# include it in the recipe above, and list it in env_d_units.
+[environment]
+apt = []
+env_d_units = []

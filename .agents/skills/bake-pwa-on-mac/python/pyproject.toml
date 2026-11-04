@@ -1,0 +1,13 @@
+[project]
+name = "bake-pwa-on-mac-skill"
+version = "0.1.0"
+description = "Asks the PWA Baker app on the user's Mac for Chromium web apps, through its shared folder"
+requires-python = ">=3.12"
+dependencies = []
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["bake_pwa_on_mac_skill"]
